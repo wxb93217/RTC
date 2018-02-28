@@ -1,0 +1,144 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script type="text/javascript">
+        var html = document.documentElement;
+        var rejustRootSize = function () {
+            html.style.fontSize = html.getBoundingClientRect().width / 75 + 'px';
+        };
+        rejustRootSize();
+        window.onresize = rejustRootSize;
+    </script>
+    <title>Document</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="http://img.acadsoc.com.cn/js/vendor/jquery-1.8.3.min.js"></script>
+    <script src="http://img.acadsoc.com.cn/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.qrcode.js"></script>
+    <script type="text/javascript" src="js/qrcode.js"></script>
+    
+    <!--[if lt IE 9]>
+        <script src="https://img.acadsoc.com.cn/web/js/vendor/html5shiv.js"></script>
+        <script src="https://img.acadsoc.com.cn/web/js/vendor/respond.min.js"></script>
+    <![endif]-->
+    <style type="text/css">
+    </style>
+    <style type="text/css">
+    </style>
+</head>
+<body>
+    <div class="main" id="index">
+        <div class="count">实时：当前已有 <span class="SuccessNum">xxx</span> 人冲顶成功！</div>
+        <div class="banner"><img src="img/banner.png" alt=""></div>
+        <div class="content">
+            <div class="tips">
+                <img src="img/tips.png" class="tips-bg" alt="">
+                <p id="noChance">邀请好友首次参与答题活动，<br>你和ta就各得一次复活机会。<br>它将帮助你冲顶成功！<br><span>点击下方【邀请好友】，获取复活机会</span></p>
+                <p id="hasChance">已获取 <em id="chanceNum">XXX</em> 个复活机会<br><span>点击下方【邀请好友】，获取复活机会</span></p>
+            </div>
+            <div class="btn-wrap clearfix">
+                <div class="col-xs-6 pd0">
+                    <a href="#" id="Relive"><img src="img/invite-btn.png" alt=""></a>
+                </div>
+                <div class="col-xs-6 pd0">
+                    <a href="answer.htm" id="gotest"><img src="img/start-btn.png" alt=""></a>
+                    <a href="#" id="Success" style="display:none;"><img src="img/start-btn.png" alt=""></a>
+                </div>
+            </div>
+            <div class="regular"><a href="javascript:void(0);" id="regularBtn"><img src="img/regular-btn.png" alt=""></a></div>
+        </div>
+    </div>
+    <!--分享复活-->
+    <div class="fenxiang">
+        <div id="divOne"></div><!--canvas二维码-->
+        <div class="imgg"><!--二维码图片框-->
+          <img src="http://img.acadsoc.com.cn/web/img/temp/ShareCode.jpg" id="haibao" alt=""/><!--海报图片-->
+          <img id='imgOne'/><!--二维码图片-->
+          <img id="qrCodeIco" src="http://img.acadsoc.com.cn/web/img/temp/fx-logo.jpg"/><!--二维码logo图片-->
+        </div>
+    </div>
+    <!--冲顶成功-->
+    <div class="chongding">
+        <div id="divTwo"></div><!--canvas二维码-->
+        <div class="imgg2"><!--二维码图片框-->
+          <img src="http://img.acadsoc.com.cn/web/img/temp/SuccessCode.jpg" id="haibao2" alt=""/><!--海报图片-->
+          <img id='imgTwo'/><!--二维码图片-->
+          <img id="qrCodeIco2" src="http://img.acadsoc.com.cn/web/img/temp/fx-logo.jpg"/><!--二维码logo图片-->
+        </div>
+    </div>
+    <!--活动规则-->
+    <div class="modal main-modal fade" id="modelRegular">
+        <div class="modal-dialog">
+            <div class="">
+                <div class="text-right">
+                    <button type="button" class="regularClose" aria-hidden="true" data-dismiss="modal" tabindex="-1"></button>
+                </div>
+                <div class="modal-body"><img src="img/regular.png" alt=""></div>
+            </div>
+        </div>
+    </div>
+    <!--分享复活-->
+    <div class="modal fade" id="modelShareRelive">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="border:0;padding:25px 25px 0;">
+                    <button type="button" class="close" aria-hidden="true" data-dismiss="modal" aria-label="Close" tabindex="-1">
+                        ×</button>
+                    <h4 class="modal-title" style="color:#000;font-size: 2.5rem;">长按图片保存，发送给朋友或分享到朋友圈</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <div id="imgBox" align="center"><img id="shareImage" src="" /></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--冲顶成功-->
+    <div class="modal fade" id="modelSuccess">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="border:0;padding:25px 25px 0;">
+                    <button type="button" class="close" aria-hidden="true" data-dismiss="modal" aria-label="Close" tabindex="-1">
+                        ×</button>
+                    <h4 class="modal-title" style="color:#000;font-size: 2.5rem;">长按图片保存，发送给朋友或分享到朋友圈</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="imgBox2" align="center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function(){
+            //$(".imgg").hide();//合成前的图片隐藏，在生成图片方法后调用
+            //$(".imgg2").hide();//合成前的图片隐藏，在生成图片方法后调用
+            //设置高度最小100%
+            
+
+            //查看规则按钮
+            $('#regularBtn').click(function(){
+                $('#modelRegular').modal('show');
+            })
+
+            shareCode('123456');
+            //邀请好友按钮
+            $('#Relive').click(function(){
+                $('#modelShareRelive').modal('show');
+            })
+
+            //完成冲顶分享
+            $('#Success').click(function(){
+                hecheng2();
+                $('#modelSuccess').modal('show');
+            })
+
+        })
+        var search="123";//参数
+        var uid="dfjasdflkldsljkf"//用户uid
+        var rd = "http://www.acadsoc.com.cn/lps/lp4.htm?search="+search+"&uid="+uid;//活动页链接
+    </script>
+    <script type="text/javascript" src="js/erweima.js"></script>
+</body>
+</html>

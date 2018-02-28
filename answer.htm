@@ -1,0 +1,367 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script type="text/javascript">
+        var html = document.documentElement;
+        var rejustRootSize = function () {
+            html.style.fontSize = html.getBoundingClientRect().width / 75 + 'px';
+        };
+        rejustRootSize();
+        window.onresize = rejustRootSize;
+    </script>
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="http://img.acadsoc.com.cn/WebNew/assets/global/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="http://img.acadsoc.com.cn/WebNew/assets/global/css/simple-line-icons.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="http://www.acadsoc.com.cn/lps/appzhuanxiang/css/ZhiHui_Class.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script type="text/javascript" src="http://img.acadsoc.com.cn/js/vendor/jquery-1.8.3.min.js"></script>
+    <script src="http://img.acadsoc.com.cn/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery.qrcode.js"></script>
+    <script type="text/javascript" src="js/qrcode.js"></script>
+    <!--[if lt IE 9]>
+        <script src="https://img.acadsoc.com.cn/web/js/vendor/html5shiv.js"></script>
+        <script src="https://img.acadsoc.com.cn/web/js/vendor/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="main" id="page-answer">
+        <div class="title text-right"><img src="img/title.png" alt=""></div>
+        <div class="content">
+            <div class="wrap">
+                <div id="timeCircle" class="alert-box">
+                    <svg class="alert-circle" width="60" height="60">
+                        <circle cx="30" cy="30" r="25" fill="#FFF" stroke="#ffdf18" stroke-width="5"></circle>
+                        <circle id="circleRate" class="alert-sec-circle" cx="30" cy="30" r="25" fill="transparent" stroke="#e5e5e5" stroke-width="6" transform="rotate(-90 30 30)"></circle>
+                    </svg>
+                    <div id="countDown" class="alert-sec-text">15</div>
+                </div>
+                <div class="questions clearfix"><i id="quNum">1.</i><p id="question">What’s your best course of action when you’re caught in a lightning storm?</p></div>
+                <div class="answers" id="answers">
+                    <label><input type="radio" name="q1" value="answerA">A.  Hide under something tall</label>
+                    <label><input type="radio" name="q1" value="answerB">B.  Get to the lowest spot you can find</label>
+                    <label><input type="radio" name="q1" value="answerC">C.  Seek shelter under a tree</label>
+                    <label><input type="radio" name="q1" value="answerD">D.  Wave a copper rod over your head</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 登录注册弹窗 -->
+    <div class="modal main-modal fade answerResult text-center" id="modalWelcome">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><img src="img/result-txt-welcome.png" alt=""></div>
+                <div class="modal-body">
+                    <img src="img/result-bg.png" alt="">
+                    <div class="result-wrap">
+                        <h4>答题赢课时，瓜分3000节外教课</h4>
+                        <div class="btn-wrap text-center"><a href="javascript:void(0)" class="main-btn" id="toLoginBtn" onclick="$('#modal_login').modal('show');">登录才能赢课时</a><a href="javascript:void(0)" class="main-btn main-btn2" id="toRegBtn" onclick="$('#modal_tab').modal('show');">立即注册</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 成功弹窗 -->
+    <div class="modal main-modal fade answerResult text-center" id="modalSuccess">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><img src="img/result-txt-success.png" alt=""></div>
+                <div class="modal-body">
+                    <img src="img/result-bg.png" alt="">
+                    <div class="result-wrap">
+                        <h4>「百战百胜 天下无敌」</h4>
+                        <p>「课时平分结果」将会在活动结束后进行公布，敬请期待！</p>
+                        <div class="btn-wrap text-center"><a href="javascript:void(0)" class="main-btn" id="Success">告诉朋友们</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 失败弹窗 -->
+    <div class="modal main-modal fade answerResult text-center" id="modalFail">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"><img src="img/result-txt-fail.png" alt=""></div>
+                <div class="modal-body">
+                    <img src="img/result-bg3.png" alt="">
+                    <div class="result-wrap">
+                        <h4>邀请好友参与答题，获得复活机会</h4>
+                        <div class="btn-wrap text-center"><a href="javascript:void(0)" class="main-btn" id="Relive">立即分享</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 修改弹窗 -->
+    <div class="modal main-modal fade answerResult text-center" id="modalRevise">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header"></div>
+                <div class="modal-body">
+                    <img src="img/result-bg2.png" alt="">
+                    <div class="result-wrap">
+                        <h4>是否使用一次修改答案机会？</h4>
+                        <div class="btn-wrap text-center"><a href="javascript:void(0)" class="main-btn main-btn2">否</a><a href="javascript:void(0)" class="main-btn">是</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--分享复活-->
+    <div class="fenxiang">
+        <div id="divOne"></div><!--canvas二维码-->
+        <div class="imgg"><!--二维码图片框-->
+          <img src="http://img.acadsoc.com.cn/web/lps/tweets/img/bill.jpg" id="haibao" alt=""/><!--海报图片-->
+          <img id='imgOne'/><!--二维码图片-->
+          <img id="qrCodeIco" src="http://img.acadsoc.com.cn/web/img/temp/fx-logo.jpg"/><!--二维码logo图片-->
+        </div>
+    </div>
+    <!--冲顶成功-->
+    <div class="chongding">
+        <div id="divTwo"></div><!--canvas二维码-->
+        <div class="imgg2"><!--二维码图片框-->
+          <img src="http://img.acadsoc.com.cn/web/lps/tweets/img/bill.jpg" id="haibao2" alt=""/><!--海报图片-->
+          <img id='imgTwo'/><!--二维码图片-->
+          <img id="qrCodeIco2" src="http://img.acadsoc.com.cn/web/img/temp/fx-logo.jpg"/><!--二维码logo图片-->
+        </div>
+    </div>
+    <!--分享复活-->
+    <div class="modal fade" id="modelShareRelive">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="border:0;padding:25px 25px 0;">
+                    <button type="button" class="close" aria-hidden="true" data-dismiss="modal" aria-label="Close" tabindex="-1">
+                        ×</button>
+                    <h4 class="modal-title" style="color:#000;font-size: 2.5rem;">长按图片保存，发送给朋友或分享到朋友圈</h4>
+                </div>
+                <div class="modal-body text-center">
+                    <div id="imgBox" align="center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--冲顶成功-->
+    <div class="modal fade" id="modelSuccess">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="border:0;padding:25px 25px 0;">
+                    <button type="button" class="close" aria-hidden="true" data-dismiss="modal" aria-label="Close" tabindex="-1">
+                        ×</button>
+                    <h4 class="modal-title" style="color:#000;font-size: 2.5rem;">长按图片保存，发送给朋友或分享到朋友圈</h4>
+                </div>
+                <div class="modal-body">
+                    <div id="imgBox2" align="center"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 登录弹窗 -->
+    <div class="modal fade overflow-y" id="modal_login">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="padding: 25px 25px 10px 25px; border: 0;">
+                    <button type="button" class="close" style="margin: -10px;" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h3 class="modal-title text-center text-success">
+                        <strong>登录</strong></h3>
+                </div>
+                <div class="modal-body clearfix" style="text-align: left; padding-bottom: 40px; padding-top: 0;">
+                    <ul class="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1">
+                        <li class="back20"></li>
+                        <li class="posi-re"><span class="icon-user posi-ab register_icon"></span>
+                            <input class="form-control register_input" id="login_phone" name="login_name" placeholder="会员手机号码" type="text">
+                        </li>
+                        <li class="back20"></li>
+                        <li class="posi-re"><span class="icon-lock-open posi-ab register_icon"></span>
+                            <input class="form-control register_input" id="login_pwd" name="login_pwd" maxlength="22" placeholder="登录密码" type="password">
+                        </li>
+                        <div id="divImageCodeLogin" style="display: none">
+                            <li class="back20"></li>
+                            <li class="posi-re" style="display: inline-flex;"><span class="icon-key posi-ab register_icon">
+                            </span>
+                                <input type="text" class="form-control register_input" id="txtImgCodeLogin" maxlength="4" placeholder="验证码" style="width: 100%; padding-left: 50px">
+                                <img id="imgVerCodeLogin" src="/vaildate.ashx" onclick="$(this).attr('src', '/vaildate.ashx?'+ Math.random())" alt="图型验证码">
+                            </li>
+                            <input type="hidden" id="errCount" value="0">
+                        </div>
+                        <li class="back20"></li>
+                        <li class="register_che">
+                            <label>
+                                <input name="ChkAutoLogin" value="" checked="" type="checkbox">&nbsp;&nbsp;自动登录
+                            </label>
+                            <a href="/webnew/forgetpw.aspx">忘记密码？</a></li>
+                        <li class="back20"></li>
+                        <li>
+                            <button type="button" id="login_user" class="col-xs-12 btn btn-lg btn-sea-blue">
+                                立即登录</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册弹窗 -->
+    <div class="modal fade overflow-y" id="modal_tab">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header" style="padding: 25px 25px 10px 25px; border: 0;">
+                    <button type="button" class="close" style="margin: -10px;" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span></button>
+                    <h3 class="modal-title text-center text-success">
+                        <strong>立即参与</strong></h3>
+                </div>
+                <div class="modal-body clearfix" style="text-align: left; padding-bottom: 40px; padding-top: 0;">
+                    <ul class="col-xs-12 col-xs-offset-0 col-sm-10 col-sm-offset-1">
+                        <li class="back20"></li>
+                        <li class="posi-re"><span class="fa fa-mobile-phone posi-ab register_icon" style="font-size: 27px;
+                            top: 10px;"></span>
+                            <input type="text" class="form-control register_input TxtPhone" id="TxtPhone" pattern="^1[0-9]{10}" name="TxtPhone" placeholder="请输入手机号码">
+                        </li>
+                        <li class="register_code clearfix">
+                            <div class="col-xs-6 padding text-left register_left" style="padding: 0!important">
+                                <button href="javascript:;" id="btnGetVoice" class="btn btn-link btn-xs sms-verify">
+                                    <span>
+                                        <fa class="fa fa-phone"></fa>
+                                        获取语音验证码</span></button>
+                            </div>
+                            <div class="col-xs-6 padding text-right register_right" style="padding: 0!important">
+                                <button href="javascript:;" id="btnGetSMS" class="btn btn-link btn-xs sms-verify">
+                                    <span>
+                                        <fa class="fa fa-envelope-o"></fa>
+                                        获取短信验证码</span></button>
+                            </div>
+                        </li>
+                        <li class="posi-re"><span class="fa fa-key posi-ab register_icon2"></span>
+                            <input type="text" class="form-control register_input" id="TxtCode" name="TxtCode" value="" placeholder="验证码">
+                        </li>
+                        <li class="back20"></li>
+                        <li class="posi-re"><span class="fa fa-lock posi-ab register_icon2"></span>
+                            <input type="password" class="form-control register_input" id="TxtPassword" minlength="6" maxlength="22" name="TxtPassword" placeholder="登录密码">
+                        </li>
+                        <li class="back20"></li>
+                        <li class="text-center">
+                            <button type="button" id="registerSubmit" class="col-xs-12 btn btn-lg btn-sea-blue" style="margin-bottom: 15px;">
+                                立即注册</button>
+                        </li>
+                        <li class="text-center"><a href="javascript:;" data-target="#modal_login" data-toggle="modal" onclick="$('#modal_tab').modal('hide')" style="color: #666;">已有账户,请登录</a> </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!--图片验证-->
+    <div class="modal" id="model-verify">
+        <div class="modal-dialog" style="max-width:400px; margin:100px auto;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" aria-hidden="true" data-dismiss="modal" tabindex="-1">
+                        &times;</button>
+                    <h4 class="modal-title" style="color:#000;">
+                        请输入图片里的文字</h4>
+                </div>
+                <div class="modal-body">
+                    <table>
+                        <tr>
+                            <td style="padding:5px;"><input type="text" id="txt_vercode" placeholder="请输入图片里的文字" maxlength="4" /></td>
+                            <td style="padding:5px;"><img alt="图型验证码" src="/vaildate.ashx" id="image_vercode" /></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="hid_type" value="" />
+                    <button type="button" id="btnSubmit" class="btn btn-info">获取验证码</button>
+                    <button class="btn btn-xs btn-default verify-cancel" data-dismiss="modal" type="button">取消</button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop in">
+        </div>
+    </div>
+
+    <script>
+    $(function(){
+
+        //分享二维码图片
+        $(".imgg").hide();//合成前的图片隐藏，在生成图片方法后调用
+        $(".imgg2").hide();//合成前的图片隐藏，在生成图片方法后调用
+
+        //设置高度最小100%
+        if($('body').height()<$(window).height()){
+            $('body').css('height',$(window).height());
+        }
+
+        //倒计时
+        //CountDownFn(); //倒计时执行方法
+        function CountDownFn(e) {
+            document.getElementById("timeCircle").style.display = "block"
+            var t = 15,
+            n = document.getElementById("circleRate");
+            document.getElementById("countDown").innerHTML = t;
+            setInterval(function() {
+                if (0 == t){
+                    //location.href="#";//#时间到后跳转地址
+                }else {
+                    t -= 1,
+                    document.getElementById("countDown").innerHTML = t;
+                    var e = Math.round(t / 15 * 158);
+                    n.style.strokeDashoffset = e - 158;
+                }
+            },
+            1000);
+        }
+
+
+        //选择答案
+        var isTouchMove;
+        $('#answers label').on({
+            'touchstart' : function(){
+                isTouchMove = false;
+            },
+            'touchmove' : function(){
+                isTouchMove = true;
+            },
+            'touchend' : function(){
+                if(!isTouchMove){
+                    $('#answers label').removeClass('choosed');
+                    $(this).addClass('choosed');
+                    var answerChoosed = $(this).find('input').val();
+                    //console.log(answerChoosed);
+                }
+            }
+        })
+
+        //欢迎弹窗
+        $('#modalWelcome').modal('show');
+
+        //邀请好友按钮
+        $('#Relive').click(function(){
+            hecheng();
+            $('#modelShareRelive').modal('show');
+        })
+
+        //完成冲顶分享
+        $('#Success').click(function(){
+            hecheng2();
+            $('#modelSuccess').modal('show');
+        })
+
+    })
+    
+    var search="123";//参数
+    var uid="dfjasdflkldsljkf"//用户uid
+    var rd = "http://www.acadsoc.com.cn/lps/lp4.htm?search="+search+"&uid="+uid;//活动页链接
+    </script>
+    <script type="text/javascript" src="js/erweima.js"></script>
+</body>
+</html>
